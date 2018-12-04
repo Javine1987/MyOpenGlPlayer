@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <k.com.javine.myopenglplayer.MyGlSurfaceView
+        android:id="@+id/glsurfaceview"
+        android:layout_centerInParent="true"
+        android:layout_width="640px"
+        android:layout_height="480px" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="play"/>
+
+</RelativeLayout>
