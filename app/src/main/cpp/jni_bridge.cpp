@@ -60,6 +60,7 @@ GLint gaTextureHandle;
 GLint guMVPMatrixHandle;
 GLint guSTMatrixHandle;
 GLint mTextureID;
+GLuint mVBHandle;
 
 glm::mat4 mVMatrix;
 glm::mat4 mMMatrix;
@@ -177,6 +178,13 @@ extern "C" {
         glTexParameterf(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         checkGlError("glTexParameterf mTextureID");
+
+        //绑定顶点数据
+        glGenBuffers(1, &mVBHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBHandle);
+        checkGlError("glBindBuffer");
+        glBufferData(GL_ARRAY_BUFFER, sizeof(gVerticesData), gVerticesData, GL_STATIC_DRAW);
+        checkGlError("glBufferData");
     }
 
     JNIEXPORT void JNICALL
@@ -192,11 +200,13 @@ extern "C" {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         glUseProgram(mProgram);
         checkGlError("glUseProgram");
-
-        glVertexAttribPointer(gaPositionHandle, 3, GL_FLOAT, GL_FALSE, cVertexStride, gVerticesData);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBHandle);
+        glVertexAttribPointer(gaPositionHandle, 3, GL_FLOAT, GL_FALSE,
+                              cVertexStride, (const void*)0);
         glEnableVertexAttribArray(gaPositionHandle);
         checkGlError("glEnableVertexAttribArray aPosition");
-        glVertexAttribPointer(gaTextureHandle, 2, GL_FLOAT, GL_FALSE, cVertexStride, gVerticesData+3);
+        glVertexAttribPointer(gaTextureHandle, 2, GL_FLOAT, GL_FALSE,
+                              cVertexStride, (const void*)(3*sizeof(GL_FLOAT)));
         glEnableVertexAttribArray(gaTextureHandle);
         checkGlError("glEnableVertexAttribArray textureCoord");
 
